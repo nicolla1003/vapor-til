@@ -9,6 +9,9 @@ public func routes(_ router: Router) throws {
     let acronymsController = AcronymsController()
     try router.register(collection: acronymsController)
     
+    let categoriesController = CategoriesController()
+    try router.register(collection: categoriesController)
+    
     router.get { req in
         return "It works!"
     }
