@@ -3,7 +3,7 @@ import Fluent
 
 struct UsersController: RouteCollection {
     func boot(router: Router) throws {
-        let usersGroup = router.grouped("api", "users")
+        let usersRoute = router.grouped("api", "users")
         
         usersRoute.post(User.self, use: createHandler)
         usersRoute.get(use: getAllHandler)
