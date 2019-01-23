@@ -2,6 +2,10 @@ import Foundation
 import Vapor
 import FluentPostgreSQL
 
+import Foundation
+import Vapor
+import FluentPostgreSQL
+
 final class User: Codable {
     var id: UUID?
     var name: String
@@ -13,13 +17,13 @@ final class User: Codable {
     }
 }
 
+extension User: PostgreSQLUUIDModel {}
+extension User: Content {}
+extension User: Migration {}
+extension User: Parameter {}
+
 extension User {
     var acronyms: Children<User, Acronym> {
         return children(\.userID)
     }
 }
-
-extension User: PostgreSQLUUIDModel {}
-extension User: Content {}
-extension User: Migration {}
-extension User: Parameter {}

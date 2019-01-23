@@ -26,10 +26,10 @@ extension Acronym {
 
 extension Acronym: Migration {
     static func prepare(on connection: PostgreSQLConnection) -> Future<Void> {
-        return Database.create(self, on: connection, closure: { builder in
+        return Database.create(self, on: connection) { builder in
             try addProperties(to: builder)
             builder.reference(from: \.userID, to: \User.id)
-        })
+        }
     }
 }
 

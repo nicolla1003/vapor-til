@@ -5,10 +5,14 @@ struct UsersController: RouteCollection {
     func boot(router: Router) throws {
         let usersGroup = router.grouped("api", "users")
         
-        usersGroup.get(use: getAllHandler)
-        usersGroup.get(User.parameter, use: getHandler)
-        usersGroup.post(User.self, use: createHandler)
-        usersGroup.get(User.parameter, "acronyms", use: getAcronymsHandler)
+        usersRoute.post(User.self, use: createHandler)
+        usersRoute.get(use: getAllHandler)
+        usersRoute.get(User.parameter, use: getHandler)
+        usersRoute.get(User.parameter, "acronyms", use: getAcronymsHandler)
+    }
+    
+    func createHandler(_ req: Request, user: User) throws -> Future<User> {
+        return user.save(on: req)
     }
     
     func getAllHandler(_ req: Request) throws -> Future<[User]> {
@@ -19,14 +23,9 @@ struct UsersController: RouteCollection {
         return try req.parameters.next(User.self)
     }
     
-    func createHandler(_ req: Request, user: User) throws -> Future<User> {
-        return user.save(on: req)
-    }
-    
     func getAcronymsHandler(_ req: Request) throws -> Future<[Acronym]> {
-        return try req.parameters.next(User.self)
-            .flatMap(to: [Acronym].self) { user in
-                try user.acronyms.query(on: req).all()
-            }
+        return try req.parameters.next(User.self).flatMap(to: [Acronym].self) { user in
+            try user.acronyms.query(on: req).all()
+        }
     }
 }
